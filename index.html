@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>MKK. — Luxury Watches</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Redacted+Script:wght@400;700&family=Ruslan+Display&display=swap" rel="stylesheet">
+
+  <!-- Material Symbols -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+  <style>
+    /* ===== RESET & BASE ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #000;
+      font-family: 'Poppins', sans-serif;
+      color: #fff;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ===== HERO / COLUMNS ===== */
+    .hero {
+      display: flex;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .column {
+      position: relative;
+      flex: 1 1 33.333%;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      background: #111;
+    }
+
+    /* IDENTICAL FILTER & OVERLAY FOR ALL COLUMNS */
+    .column .bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      filter: grayscale(100%) contrast(1.1) brightness(0.85);
+      transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      z-index: 0;
+    }
+
+    .column .overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6); /* Exactly 60% black */
+      z-index: 1;
+    }
+
+    /* hover zoom (desktop) */
+    @media (hover: hover) and (min-width: 769px) {
+      .column:hover .bg {
+        transform: scale(1.04);
+      }
+    }
+
+    /* content above overlay */
+    .column .content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 0 24px;
+      width: 100%;
+      opacity: 0;
+      animation: fadeUp 1s ease forwards;
+    }
+
+    .column:nth-child(1) .content { animation-delay: 0.2s; }
+    .column:nth-child(2) .content { animation-delay: 0.45s; }
+    .column:nth-child(3) .content { animation-delay: 0.7s; }
+
+    @keyframes fadeUp {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    /* headline (Redacted Script) — SCALED DOWN ~50% */
+    .headline {
+      font-family: 'Redacted Script', cursive;
+      font-weight: 700;
+      /* Original: clamp(2.2rem, 4.2vw, 4rem) -> Halved: */
+      font-size: clamp(1.1rem, 2.1vw, 2rem);
+      line-height: 1.15;
+      color: #fff;
+      letter-spacing: 0.02em;
+      /* Original: 18px -> Halved: */
+      margin-bottom: 9px;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+    }
+
+    /* subtext */
+    .subtext {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 500;
+      font-size: clamp(0.9rem, 1.15vw, 1.15rem);
+      line-height: 1.6;
+      color: rgba(255,255,255,0.92);
+      letter-spacing: 0.02em;
+    }
+    .subtext span {
+      display: block;
+    }
+
+    /* ===== BACKGROUND IMAGES (placeholders) ===== */
+    .col-1 .bg {
+      background-image: url('https://images.unsplash.com/photo-1547996160-81dfa63595aa?q=80&w=1200&auto=format&fit=crop');
+      background-position: center 40%;
+    }
+    .col-2 .bg {
+      background-image: url('https://images.unsplash.com/photo-1523170335258-f5ed11844a49?q=80&w=1200&auto=format&fit=crop');
+      background-position: center 50%;
+    }
+    .col-3 .bg {
+      background-image: url('https://images.unsplash.com/photo-1548171915-e79a380a2a4b?q=80&w=1200&auto=format&fit=crop');
+      background-position: center 55%;
+    }
+
+    /* ===== NAV WRAPPER (pill only) ===== */
+    .nav-wrapper {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: fit-content;
+    }
+
+    /* ===== PILL BAR (constant shape) ===== */
+    .pill-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 12px 22px;
+      background: #f5f5f7;
+      border-radius: 999px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.35), 0 2px 8px rgba(0,0,0,0.15);
+      cursor: default;
+      transition: none;
+    }
+
+    /* Hamburger */
+    .pill-bar .menu-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #1a1a1a;
+      transition: opacity 0.2s ease;
+      user-select: none;
+    }
+    .pill-bar .menu-icon:hover {
+      opacity: 0.6;
+    }
+    .pill-bar .menu-icon .material-symbols-outlined {
+      font-size: 20px;
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+
+    /* Logo */
+    .pill-bar .logo {
+      font-family: 'Ruslan Display', cursive;
+      font-size: 20px;
+      font-weight: 700;
+      color: #000;
+      letter-spacing: 0.04em;
+      line-height: 1;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    /* Profile icon */
+    .pill-bar .profile-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #1a1a1a;
+      transition: opacity 0.2s ease;
+      user-select: none;
+    }
+    .pill-bar .profile-icon:hover {
+      opacity: 0.6;
+    }
+    .pill-bar .profile-icon .material-symbols-outlined {
+      font-size: 20px;
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+
+    /* ===== FLOATING DROPDOWN CARDS ===== */
+    .dropdown-card {
+      position: absolute;
+      bottom: calc(100% + 12px);
+      background: #f5f5f7;
+      border-radius: 20px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.15);
+      padding: 6px 0;
+      min-width: 180px;
+      opacity: 0;
+      transform: translateY(8px) scale(0.95);
+      pointer-events: none;
+      transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+                  transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 101;
+      white-space: nowrap;
+    }
+
+    .dropdown-card.open {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    #menuDropdown {
+      left: 0;
+    }
+
+    #profileDropdown {
+      right: 0;
+    }
+
+    .dropdown-card ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .dropdown-card li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 18px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #1a1a1a;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .dropdown-card li:hover {
+      background: rgba(0,0,0,0.06);
+    }
+
+    .dropdown-card li .material-symbols-outlined {
+      font-size: 20px;
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      color: #444;
+    }
+
+    .dropdown-card .divider {
+      height: 1px;
+      background: rgba(0,0,0,0.1);
+      margin: 4px 16px;
+      padding: 0;
+      cursor: default;
+      pointer-events: none;
+    }
+    .dropdown-card .divider:hover {
+      background: rgba(0,0,0,0.1);
+    }
+
+    /* ===== DOT INDICATORS (mobile only) ===== */
+    .dots {
+      display: none;
+      position: fixed;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 90;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+    }
+    .dots .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.35);
+      transition: background 0.3s ease, transform 0.3s ease;
+      cursor: pointer;
+    }
+    .dots .dot.active {
+      background: #fff;
+      transform: scale(1.25);
+    }
+
+    /* ===== MOBILE CAROUSEL ===== */
+    @media (max-width: 768px) {
+      html, body {
+        overflow: hidden;
+      }
+
+      .hero {
+        display: flex;
+        flex-direction: row;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        width: 100vw;
+        height: 100vh;
+        scrollbar-width: none;
+      }
+      .hero::-webkit-scrollbar {
+        display: none;
+      }
+
+      .column {
+        flex: 0 0 100vw;
+        width: 100vw;
+        height: 100vh;
+        scroll-snap-align: center;
+      }
+
+      .column .bg {
+        background-position: center 45%;
+        background-size: cover;
+      }
+
+      /* Headline scaled down ~50% for mobile too, 
+         with a slightly higher min to stay legible */
+      .headline {
+        font-size: clamp(1.3rem, 5vw, 1.8rem);
+        margin-bottom: 8px;
+      }
+
+      .subtext {
+        font-size: 15px;
+        line-height: 1.55;
+      }
+
+      .dots {
+        display: flex;
+      }
+
+      .nav-wrapper {
+        bottom: 24px;
+      }
+
+      .pill-bar {
+        padding: 10px 18px;
+        gap: 14px;
+      }
+      .pill-bar .logo {
+        font-size: 17px;
+      }
+      .pill-bar .menu-icon .material-symbols-outlined,
+      .pill-bar .profile-icon .material-symbols-outlined {
+        font-size: 18px;
+      }
+
+      .dropdown-card {
+        bottom: calc(100% + 10px);
+        border-radius: 16px;
+        min-width: 160px;
+      }
+      .dropdown-card li {
+        font-size: 13px;
+        padding: 9px 16px;
+      }
+      .dropdown-card li .material-symbols-outlined {
+        font-size: 18px;
+      }
+    }
+
+    /* ===== VERY SMALL SCREENS ===== */
+    @media (max-width: 380px) {
+      .pill-bar {
+        padding: 8px 14px;
+        gap: 10px;
+      }
+      .pill-bar .logo {
+        font-size: 15px;
+      }
+      .dropdown-card li {
+        padding: 8px 14px;
+      }
+    }
+
+    /* ===== ACCESSIBILITY / FOCUS ===== */
+    .menu-icon:focus-visible,
+    .profile-icon:focus-visible {
+      outline: 2px solid #000;
+      outline-offset: 2px;
+      border-radius: 4px;
+    }
+
+    .menu-icon, .profile-icon, .logo, .dropdown-card li {
+      -webkit-tap-highlight-color: transparent;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="hero">
+
+    <!-- Column 1: Case-back / Movement -->
+    <div class="column col-1" id="section-tetra">
+      <div class="bg"></div>
+      <div class="overlay"></div>
+      <div class="content">
+        <div class="headline">tetraCovalency</div>
+        <div class="subtext">
+          <span>Made by tertacovalency</span>
+          <span>Made for Tetrahedron</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Column 2: Chronograph Dial -->
+    <div class="column col-2" id="section-hydro">
+      <div class="bg"></div>
+      <div class="overlay"></div>
+      <div class="content">
+        <div class="headline">HydroCarbon</div>
+        <div class="subtext">
+          <span>Made by hydrocarbons</span>
+          <span>Made for carbon atom</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Column 3: Dive Watch on Bracelet -->
+    <div class="column col-3" id="section-organic">
+      <div class="bg"></div>
+      <div class="overlay"></div>
+      <div class="content">
+        <div class="headline">Organic</div>
+        <div class="subtext">
+          <span>Made by Cracking</span>
+          <span>Made for Cracking</span>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ===== DOT INDICATORS (mobile) ===== -->
+  <div class="dots" id="dots">
+    <div class="dot active" data-index="0"></div>
+    <div class="dot" data-index="1"></div>
+    <div class="dot" data-index="2"></div>
+  </div>
+
+  <!-- ===== NAV WRAPPER ===== -->
+  <div class="nav-wrapper" id="navWrapper">
+
+    <!-- Hamburger Dropdown (floating card, text-only) -->
+    <div class="dropdown-card" id="menuDropdown">
+      <ul>
+        <li data-target="section-organic">Organic</li>
+        <li data-target="section-tetra">Tetracovalency</li>
+        <li data-target="section-hydro">Hydrocarbons</li>
+      </ul>
+    </div>
+
+    <!-- Profile Dropdown (floating card, icons + divider) -->
+    <div class="dropdown-card" id="profileDropdown">
+      <ul>
+        <li><span class="material-symbols-outlined">person</span> Account</li>
+        <li><span class="material-symbols-outlined">favorite</span> Wishlist</li>
+        <li><span class="material-symbols-outlined">shopping_bag</span> Cart</li>
+        <li class="divider"></li>
+        <li><span class="material-symbols-outlined">logout</span> Logout</li>
+      </ul>
+    </div>
+
+    <!-- Pill bar (constant shape) -->
+    <div class="pill-bar" id="pillBar">
+      <div class="menu-icon" id="menuIcon" role="button" tabindex="0" aria-label="Menu">
+        <span class="material-symbols-outlined">menu</span>
+      </div>
+      <div class="logo">MKK.</div>
+      <div class="profile-icon" id="profileIcon" role="button" tabindex="0" aria-label="Profile">
+        <span class="material-symbols-outlined">account_circle</span>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    (function() {
+      'use strict';
+
+      // ===== ELEMENTS =====
+      const menuIcon = document.getElementById('menuIcon');
+      const profileIcon = document.getElementById('profileIcon');
+      const menuDropdown = document.getElementById('menuDropdown');
+      const profileDropdown = document.getElementById('profileDropdown');
+      const hero = document.getElementById('hero');
+      const dots = document.querySelectorAll('.dot');
+      const navWrapper = document.getElementById('navWrapper');
+
+      // ===== STATE =====
+      let isMenuOpen = false;
+      let isProfileOpen = false;
+
+      // ===== DROPDOWN TOGGLES =====
+      function closeAll() {
+        isMenuOpen = false;
+        isProfileOpen = false;
+        menuDropdown.classList.remove('open');
+        profileDropdown.classList.remove('open');
+      }
+
+      function openMenu() {
+        if (isProfileOpen) {
+          profileDropdown.classList.remove('open');
+          isProfileOpen = false;
+        }
+        
+        isMenuOpen = true;
+        menuDropdown.classList.add('open');
+      }
+
+      function openProfile() {
+        if (isMenuOpen) {
+          menuDropdown.classList.remove('open');
+          isMenuOpen = false;
+        }
+
+        isProfileOpen = true;
+        profileDropdown.classList.add('open');
+      }
+
+      // ===== EVENT LISTENERS =====
+      menuIcon.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (isMenuOpen) {
+          closeAll();
+        } else {
+          openMenu();
+        }
+      });
+
+      profileIcon.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (isProfileOpen) {
+          closeAll();
+        } else {
+          openProfile();
+        }
+      });
+
+      menuIcon.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          if (isMenuOpen) {
+            closeAll();
+          } else {
+            openMenu();
+          }
+        }
+      });
+
+      profileIcon.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          if (isProfileOpen) {
+            closeAll();
+          } else {
+            openProfile();
+          }
+        }
+      });
+
+      document.addEventListener('click', function(e) {
+        if (!navWrapper.contains(e.target) && 
+            !menuDropdown.contains(e.target) && 
+            !profileDropdown.contains(e.target)) {
+          closeAll();
+        }
+      });
+
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          closeAll();
+        }
+      });
+
+      menuDropdown.querySelectorAll('li[data-target]').forEach(function(item) {
+        item.addEventListener('click', function() {
+          const targetId = this.getAttribute('data-target');
+          const targetEl = document.getElementById(targetId);
+          if (targetEl) {
+            targetEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+          }
+          closeAll();
+        });
+      });
+
+      profileDropdown.querySelectorAll('li:not(.divider)').forEach(function(item) {
+        item.addEventListener('click', function() {
+          closeAll();
+        });
+      });
+
+      // ===== MOBILE CAROUSEL DOT INDICATORS =====
+      function updateDots() {
+        if (window.innerWidth > 768) return;
+
+        const scrollLeft = hero.scrollLeft;
+        const width = hero.clientWidth;
+        if (width === 0) return;
+
+        const index = Math.round(scrollLeft / width);
+        dots.forEach(function(dot, i) {
+          dot.classList.toggle('active', i === index);
+        });
+      }
+
+      let ticking = false;
+      hero.addEventListener('scroll', function() {
+        if (!ticking) {
+          window.requestAnimationFrame(function() {
+            updateDots();
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }, { passive: true });
+
+      dots.forEach(function(dot) {
+        dot.addEventListener('click', function() {
+          const index = parseInt(this.getAttribute('data-index'), 10);
+          const target = hero.children[index];
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+          }
+        });
+      });
+
+      let resizeTimer;
+      window.addEventListener('resize', function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function() {
+          updateDots();
+          closeAll();
+        }, 100);
+      });
+
+      window.addEventListener('load', function() {
+        updateDots();
+      });
+
+      hero.addEventListener('touchmove', function(e) {
+        if (Math.abs(e.touches[0].clientX - (hero._lastX || 0)) < 5) {
+          // Mostly vertical movement - prevent default to stop page bounce
+        }
+        hero._lastX = e.touches[0].clientX;
+      }, { passive: true });
+
+      hero.addEventListener('scroll', function() {
+        closeAll();
+      }, { passive: true });
+
+    })();
+  </script>
+</body>
+</html>
